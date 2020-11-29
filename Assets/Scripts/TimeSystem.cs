@@ -43,6 +43,7 @@ public class TimeSystem : MonoBehaviour
 
             if (_tick % 5 == 0)
             {
+                Debug.Log( "[TimeSystem]: Tick 5");
                 OnTick_5?.Invoke(this, new OnTickEventArgs {tick = _tick});
             }
         }

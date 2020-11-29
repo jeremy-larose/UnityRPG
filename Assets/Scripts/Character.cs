@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
+    public static Character Instance { get; private set; }
     public HealthSystem healthSystem;
     public int currentHP { get; private set; }
 
@@ -22,24 +23,20 @@ public class Character : MonoBehaviour
 
     private void Awake()
     {
+        Instance = this;
         healthSystem = new HealthSystem( Dice.Roll( 4, 8 ));
         currentHP = healthSystem.GetHealth();
-        
+        TimeSystem.OnTick_5 += RegenHealth;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            Debug.Log( "Taking Damage.");
-            healthSystem.Damage( 20 );
-        }
     }
 
-    private void TimeTickSystem_OnTick_5(object sender, TimeSystem.OnTickEventArgs e)
+    private void RegenHealth(object sender, TimeSystem.OnTickEventArgs e)
     {
-        Debug.Log( "Character: Tick. Player->CurrentHP +5." );
+        Debug.Log( "Character: RegenHealth: Player->CurrentHP +5." );
         AddHealth(5);
     }
 
@@ -55,7 +52,7 @@ public class Character : MonoBehaviour
             damageTotal *= 2;
         
         healthSystem.Damage( damageTotal );
-        CombatText.Create(GetPosition(), damageTotal, isCriticalHit, "FFFFFF");
+        CombatText.Create(GetPosition(), damageTotal, isCriticalHit, new Color32( 255, 128, 0, 255 ) );
 
         if (healthSystem.GetHealth() <= 0)
         {
@@ -67,6 +64,7 @@ public class Character : MonoBehaviour
     {
         currentHP += healing;
         OnHealthChanged?.Invoke( this, EventArgs.Empty );
+        CombatText.Create(GetPosition() + new Vector3( 0, .5f, .5f ), 5, false, Color.green );
 
         if (currentHP >= maxHP)
             currentHP = maxHP;

@@ -33,6 +33,10 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         player = GameObject.Find( "Player" );
+        TimeSystem.OnTick_5 += delegate
+        {
+            player.GetComponent<PlayerBase>().healthSystem.Heal(5);
+        };
     }
     
     // Update is called once per frame
@@ -48,6 +52,12 @@ public class GameManager : MonoBehaviour
                 _skinIndex = 0;
             
             NPCList.Add( enemy );
+        }
+        
+        if (Input.GetKeyDown(KeyCode.T ))
+        {
+            Debug.Log( "Taking Damage.");
+            player.GetComponent<Character>().TakeDamage( Random.Range( 1, 10 ) );
         }
     }
     
