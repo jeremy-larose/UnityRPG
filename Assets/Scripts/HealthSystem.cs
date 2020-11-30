@@ -9,6 +9,7 @@ public class HealthSystem
     private int _healthMax;
     private int _health;
 
+    
     public HealthSystem(int currentHealth, int healthMax)
     {
         _health = currentHealth;

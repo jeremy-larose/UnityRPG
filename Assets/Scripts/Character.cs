@@ -38,7 +38,6 @@ public class Character : MonoBehaviour
 
     private void RegenHealth(object sender, TimeSystem.OnTickEventArgs e)
     {
-        Debug.Log( $"{charName} heals for +5." );
         AddHealth(5);
     }
 
@@ -55,6 +54,8 @@ public class Character : MonoBehaviour
         
         healthSystem.Damage( damageTotal );
         OnHealthChanged?.Invoke();
+        Debug.Log( $"{charName} take {damageTotal} points of damage." );
+
         CombatText.Create(GetPosition() + new Vector3( 0, .5f, .5f ), damageTotal, isCriticalHit, 
             new Color32( 255, 128, 0, 255 ) );
 
@@ -66,8 +67,9 @@ public class Character : MonoBehaviour
 
     public void AddHealth(int healing)
     {
-        currentHP += healing;
+        healthSystem.Heal( healing );
         OnHealthChanged?.Invoke();
+        Debug.Log( $"{charName} heals for {healing}." );
         CombatText.Create(GetPosition() + new Vector3( 0, .5f, .5f ), 5, false, Color.green );
 
         if (currentHP >= maxHP)
