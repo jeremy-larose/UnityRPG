@@ -35,17 +35,15 @@ public class TimeSystem : MonoBehaviour
     private void Update()
     {
         tickTimer += Time.deltaTime;
-        if (tickTimer >= TICK_TIMER_MAX)
-        {
-            tickTimer -= TICK_TIMER_MAX;
-            _tick++;
-            OnTick?.Invoke( this, new OnTickEventArgs { tick = _tick } );
+        if (!(tickTimer >= TICK_TIMER_MAX)) return;
+        
+        tickTimer -= TICK_TIMER_MAX;
+        _tick++;
+        OnTick?.Invoke( this, new OnTickEventArgs { tick = _tick } );
 
-            if (_tick % 5 == 0)
-            {
-                Debug.Log( "[TimeSystem]: Tick 5");
-                OnTick_5?.Invoke(this, new OnTickEventArgs {tick = _tick});
-            }
+        if (_tick % 5 == 0)
+        {
+            OnTick_5?.Invoke(this, new OnTickEventArgs {tick = _tick});
         }
     }
 }

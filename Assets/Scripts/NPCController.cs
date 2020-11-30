@@ -16,7 +16,7 @@ public class NPCController : MonoBehaviour
 
     [SerializeField] private GameObject aggroIndicator;
     private Camera _camera;
-    private GameObject _player;
+    private Character _player;
     public float aggroRadius;
     public float moveSpeed;
     private static readonly int Moving = Animator.StringToHash("moving");

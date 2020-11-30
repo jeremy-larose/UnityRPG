@@ -5,88 +5,74 @@ using UnityEngine;
 
 public class HealthSystem
 {
-    public event EventHandler OnHealthChanged;
-    //public event EventHandler OnHealthMaxChanged;
-    public event EventHandler OnCharacterDied;
     
-    private int healthMax;
-    private int health;
+    private int _healthMax;
+    private int _health;
 
-    public HealthSystem(int healthMax)
+    public HealthSystem(int currentHealth, int healthMax)
     {
-        this.healthMax = healthMax;
-        health = healthMax;
+        _health = currentHealth;
+        _healthMax = healthMax;
     }
 
     public void SetHealthAmount(int health)
     {
-        this.health = health;
-        OnHealthChanged?.Invoke( this, EventArgs.Empty ); 
+        _health = health;
     }
 
     public int GetHealth()
     {
-        return health;
+        return _health;
     }
 
     public int GetHealthMax()
     {
-        return healthMax;
+        return _healthMax;
     }
 
     public float GetHealthNormalized()
     {
-        return (float) health / healthMax;
+        return (float) _health / _healthMax;
     }
 
     public void Damage(int amount)
     {
 
-        health -= amount;
-        if (health < 0)
+        _health -= amount;
+        if (_health < 0)
         {
-            health = 0;
+            _health = 0;
         }
 
-
-        OnHealthChanged?.Invoke(this, EventArgs.Empty);
-        Debug.Log( "Health Changed: " +amount + " current: " + health );
-        //OnDamaged?.Invoke(this, EventArgs.Empty);
-        if (health <= 0)
+        if (_health <= 0)
         {
             Debug.Log( " has died.");
-            OnCharacterDied?.Invoke( this, EventArgs.Empty );
         }
     }
 
     public void Heal( int amount )
     {
-        health += amount;
-        if (health > healthMax)
+        _health += amount;
+        if (_health > _healthMax)
         {
-            health = healthMax;
+            _health = _healthMax;
         }
-        OnHealthChanged?.Invoke( this, EventArgs.Empty);
-        //OnHealed?.Invoke(this, EventArgs.Empty);
     }
 
     public void HealComplete()
     {
-        health = healthMax;
-        OnHealthChanged?.Invoke( this, EventArgs.Empty);
+        _health = _healthMax;
     }
 
     public void SetHealthMax(int healthMax, bool fullHealth)
     {
-        this.healthMax = healthMax;
-        if (fullHealth) health = healthMax;
-        //OnHealthMaxChanged?.Invoke( this, EventArgs.Empty);
-        OnHealthChanged?.Invoke( this, EventArgs.Empty);
+        this._healthMax = healthMax;
+        if (fullHealth) _health = healthMax;
     }
 
     public bool IsDead()
     {
-        if (health <= 0)
+        if (_health <= 0)
         {
             return true;
         }

@@ -28,14 +28,14 @@ public class GameManager : MonoBehaviour
     }
     #endregion
     
-    public GameObject player;
+    public Character player;
 
     void Start()
     {
-        player = GameObject.Find( "Player" );
+        player = GameObject.Find( "Player" ).GetComponent<Character>();
         TimeSystem.OnTick_5 += delegate
         {
-            player.GetComponent<PlayerBase>().healthSystem.Heal(5);
+            player.healthSystem.Heal(5);
         };
     }
     
@@ -54,10 +54,11 @@ public class GameManager : MonoBehaviour
             NPCList.Add( enemy );
         }
         
-        if (Input.GetKeyDown(KeyCode.T ))
+        if (Input.GetKeyDown( KeyCode.T ))
         {
-            Debug.Log( "Taking Damage.");
-            player.GetComponent<Character>().TakeDamage( Random.Range( 1, 10 ) );
+            var damage = Random.Range(1, 10);
+            Debug.Log( $"{player.charName} takes {damage} points of damage.");
+            player.TakeDamage( damage );
         }
     }
     

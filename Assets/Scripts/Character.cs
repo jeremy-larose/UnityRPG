@@ -8,12 +8,13 @@ public class Character : MonoBehaviour
     public static Character Instance { get; private set; }
     public HealthSystem healthSystem;
     public int currentHP { get; private set; }
-
+    public string charName;
     public int maxHP = 20;
-
     public float attackSpeed;
 
-    public event EventHandler OnHealthChanged;
+    public static event HealthChanged OnHealthChanged;
+
+    public delegate void HealthChanged();
 
     private enum State
     {
@@ -24,9 +25,10 @@ public class Character : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        healthSystem = new HealthSystem( Dice.Roll( 4, 8 ));
+        healthSystem = new HealthSystem( Dice.Roll( 4, 8 ), 50 );
         currentHP = healthSystem.GetHealth();
         TimeSystem.OnTick_5 += RegenHealth;
+        charName = "Jerekai";
     }
 
     // Update is called once per frame
@@ -36,7 +38,7 @@ public class Character : MonoBehaviour
 
     private void RegenHealth(object sender, TimeSystem.OnTickEventArgs e)
     {
-        Debug.Log( "Character: RegenHealth: Player->CurrentHP +5." );
+        Debug.Log( $"{charName} heals for +5." );
         AddHealth(5);
     }
 
@@ -52,7 +54,9 @@ public class Character : MonoBehaviour
             damageTotal *= 2;
         
         healthSystem.Damage( damageTotal );
-        CombatText.Create(GetPosition(), damageTotal, isCriticalHit, new Color32( 255, 128, 0, 255 ) );
+        OnHealthChanged?.Invoke();
+        CombatText.Create(GetPosition() + new Vector3( 0, .5f, .5f ), damageTotal, isCriticalHit, 
+            new Color32( 255, 128, 0, 255 ) );
 
         if (healthSystem.GetHealth() <= 0)
         {
@@ -63,13 +67,23 @@ public class Character : MonoBehaviour
     public void AddHealth(int healing)
     {
         currentHP += healing;
-        OnHealthChanged?.Invoke( this, EventArgs.Empty );
+        OnHealthChanged?.Invoke();
         CombatText.Create(GetPosition() + new Vector3( 0, .5f, .5f ), 5, false, Color.green );
 
         if (currentHP >= maxHP)
             currentHP = maxHP;
     }
 
+    public int GetHealth()
+    {
+        return healthSystem.GetHealth();
+    }
+
+    public int GetHealthMax()
+    {
+        return healthSystem.GetHealthMax();
+    }
+    
     public virtual void Die()
     {
         // Die in some way

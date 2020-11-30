@@ -53,18 +53,18 @@ public class CombatText : MonoBehaviour
     private void Update()
     {
         transform.position += moveVector * Time.deltaTime;
-        moveVector -= moveVector * (2f * Time.deltaTime);
+        moveVector -= moveVector * (3f * Time.deltaTime);
 
         if (disappearTimer > DISAPPEAR_TIMER_MAX * .5f)
         {
             // first half of the popup
-            float increaseScaleAmount = 1f;
+            float increaseScaleAmount = .5f;
             transform.localScale += Vector3.one * (increaseScaleAmount * Time.deltaTime);
         }
         else
         {
             // first half of the popup
-            float decreaseScaleAmount = 1f;
+            float decreaseScaleAmount = 2f;
             transform.localScale -= Vector3.one * (decreaseScaleAmount * Time.deltaTime);
             // second half of the popup
         }
@@ -73,7 +73,7 @@ public class CombatText : MonoBehaviour
         if (disappearTimer < 0)
         {
             // Start disappearing
-            float disappearSpeed = 3f;
+            float disappearSpeed = 4f;
             textColor.a -= disappearSpeed * Time.deltaTime;
             textMesh.color = textColor;
             if (textColor.a < 0)
