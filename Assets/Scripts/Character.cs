@@ -12,9 +12,8 @@ public class Character : MonoBehaviour
     public int maxHP = 20;
     public float attackSpeed;
 
-    public static event HealthChanged OnHealthChanged;
-
     public delegate void HealthChanged();
+    public static event HealthChanged OnHealthChanged;
 
     private enum State
     {
@@ -65,7 +64,7 @@ public class Character : MonoBehaviour
         }
     }
 
-    public void AddHealth(int healing)
+    private void AddHealth(int healing)
     {
         healthSystem.Heal( healing );
         OnHealthChanged?.Invoke();
