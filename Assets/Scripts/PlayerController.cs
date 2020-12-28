@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 _change = Vector3.zero;
     public float attackSpeed;
     public float moveSpeed;
+    
     private static readonly int MoveX = Animator.StringToHash("moveX");
     private static readonly int MoveZ = Animator.StringToHash("moveZ");
     private static readonly int Moving = Animator.StringToHash("moving");

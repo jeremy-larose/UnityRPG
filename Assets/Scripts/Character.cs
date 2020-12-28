@@ -11,10 +11,19 @@ public class Character : MonoBehaviour
     public string charName;
     public int maxHP = 20;
     public float attackSpeed;
+    public Dictionary<CharacterFlags, bool> Traits = new Dictionary<CharacterFlags, bool>();
+
 
     public delegate void HealthChanged();
     public static event HealthChanged OnHealthChanged;
 
+    public enum CharacterFlags
+    {
+        Pacifist,
+        Energetic,
+        Sluggish
+    }
+    
     private enum State
     {
         Normal,
@@ -30,9 +39,17 @@ public class Character : MonoBehaviour
         charName = "Jerekai";
     }
 
+    private void Start()
+    {
+        GetComponent<SpriteRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+    }
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            Traits.Add(CharacterFlags.Pacifist, true);
+        }
     }
 
     private void RegenHealth(object sender, TimeSystem.OnTickEventArgs e)
@@ -61,6 +78,14 @@ public class Character : MonoBehaviour
         if (healthSystem.GetHealth() <= 0)
         {
             Die();
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Damage"))
+        {
+            Debug.Log( $"Character: Taking damage from {other}!");
         }
     }
 
